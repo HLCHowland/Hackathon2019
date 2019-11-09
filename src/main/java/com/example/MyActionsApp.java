@@ -48,4 +48,23 @@ public class MyActionsApp extends DialogflowApp {
     return responseBuilder.build();
   }
 
+  @ForIntent("How big is a lion")
+  public ActionResponse LionSize(ActionRequest request2){
+    ResponseBuilder responseBuilder2 = getResponseBuilder(request2);
+    String test = (String) request2.getParameter("size");
+
+    Boolean correctAnswer = false;
+    if(test == "big" || test == "large"){
+      correctAnswer = true;
+    }
+
+    String answer = "You are correct";
+    if(!correctAnswer){
+      answer = "You are wrong";
+    }
+
+    responseBuilder2.add(prompt).endConversation();
+    return responseBuilder2.build();
+  }
+
 }

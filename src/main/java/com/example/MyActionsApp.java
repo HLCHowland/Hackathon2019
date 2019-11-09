@@ -42,10 +42,31 @@ public class MyActionsApp extends DialogflowApp {
 
     Integer number = test.length() * 123;
 
-    String prompt = "You're lucky number is" + number + "!";
+    String prompt = "You're lucky number is " + number + " !";
 
     responseBuilder.add(prompt).endConversation();
     return responseBuilder.build();
   }
+
+  @ForIntent("How big is a lion")
+  public ActionResponse LionSize(ActionRequest request2){
+    ResponseBuilder responseBuilder2 = getResponseBuilder(request2);
+    String test = (String) request2.getParameter("size");
+
+    Boolean correctAnswer = false;
+    if(test.equals("big")){
+      correctAnswer = true;
+    }
+    String answer = "";
+    if(correctAnswer){
+      answer = "true";
+    }else{
+      answer = "false";
+    }
+
+    responseBuilder2.add(answer).endConversation();
+    return responseBuilder2.build();
+  }
+
 
 }

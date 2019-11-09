@@ -35,31 +35,17 @@ public class MyActionsApp extends DialogflowApp {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MyActionsApp.class);
 
-  @ForIntent("Default Welcome Intent")
-  public ActionResponse welcome(ActionRequest request) {
-    LOGGER.info("Welcome intent start.");
+  @ForIntent("Test Intent")
+  public ActionResponse Test(ActionRequest request) {
     ResponseBuilder responseBuilder = getResponseBuilder(request);
-    ResourceBundle rb = ResourceBundle.getBundle("resources");
-    User user = request.getUser();
+    String test = (String) request.getParameter("test" );
 
-    if (user != null && user.getLastSeen() != null) {
-      responseBuilder.add(rb.getString("welcome_back"));
-    } else {
-      responseBuilder.add(rb.getString("welcome"));
-    }
+    Integer number = test.length() * 123;
 
-    LOGGER.info("Welcome intent end.");
+    String prompt = "You're lucky number is" + number + "!";
+
+    responseBuilder.add(prompt).endConversation();
     return responseBuilder.build();
   }
 
-  @ForIntent("bye")
-  public ActionResponse bye(ActionRequest request) {
-    LOGGER.info("Bye intent start.");
-    ResponseBuilder responseBuilder = getResponseBuilder(request);
-    ResourceBundle rb = ResourceBundle.getBundle("resources");
-
-    responseBuilder.add(rb.getString("bye")).endConversation();
-    LOGGER.info("Bye intent end.");
-    return responseBuilder.build();
-  }
 }

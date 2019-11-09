@@ -11,6 +11,8 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="myactions" target="1.8" />
+      <module name="myactions.main" target="1.8" />
+      <module name="myactions.test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

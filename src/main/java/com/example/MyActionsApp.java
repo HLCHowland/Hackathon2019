@@ -21,6 +21,7 @@ import com.google.actions.api.ActionResponse;
 import com.google.actions.api.DialogflowApp;
 import com.google.actions.api.ForIntent;
 import com.google.actions.api.response.ResponseBuilder;
+import com.google.api.services.actions_fulfillment.v2.model.SimpleResponse;
 import com.google.api.services.actions_fulfillment.v2.model.User;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -48,25 +49,18 @@ public class MyActionsApp extends DialogflowApp {
     return responseBuilder.build();
   }
 
-  @ForIntent("How big is a lion")
-  public ActionResponse LionSize(ActionRequest request2){
-    ResponseBuilder responseBuilder2 = getResponseBuilder(request2);
-    String test = (String) request2.getParameter("size");
+  @ForIntent("Run Test Quiz")
+  public ActionResponse TestQuiz(ActionRequest request){
+      MockData md = new MockData();
+      ResponseBuilder responseBuilder = getResponseBuilder(request);
 
-    Boolean correctAnswer = false;
-    if(test.equals("big")){
-      correctAnswer = true;
-    }
-    String answer = "";
-    if(correctAnswer){
-      answer = "true";
-    }else{
-      answer = "false";
-    }
+      String firstQuestionPrompt = "Okay the first question is: "+md.data[0][1];
+      responseBuilder.add(firstQuestionPrompt);
+      return responseBuilder.build();
 
-    responseBuilder2.add(answer).endConversation();
-    return responseBuilder2.build();
+
   }
+
 
 
 }

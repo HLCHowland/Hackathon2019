@@ -23,6 +23,8 @@ import com.google.actions.api.ForIntent;
 import com.google.actions.api.response.ResponseBuilder;
 import com.google.api.services.actions_fulfillment.v2.model.SimpleResponse;
 import com.google.api.services.actions_fulfillment.v2.model.User;
+
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -50,27 +52,36 @@ public class MyActionsApp extends DialogflowApp {
     return responseBuilder.build();
   }
 
-  @ForIntent("Run Test Quiz")
+  @ForIntent("QuizPrompt")
   public ActionResponse TestQuiz(ActionRequest request){
 
       ResponseBuilder responseBuilder = getResponseBuilder(request);
-
-      String firstQuestionPrompt = "Okay the first question is: "+md.data[i][0];
-      responseBuilder.add(firstQuestionPrompt).endConversation();
+      String firstQuestionPrompt = "Okay the next question is: "+md.data[i][0];
+      responseBuilder.add(firstQuestionPrompt);
       return responseBuilder.build();
   }
 
-  @ForIntent("Answer")
+  @ForIntent("AnswerPrompt")
   public ActionResponse AnswerAttempt(ActionRequest request){
-
       ResponseBuilder responseBuilder = getResponseBuilder(request);
       String attempt = (String) request.getParameter("answerAttempt");
-      if(attempt.equals(md.data[i][1])){
+      if(attempt.toLowerCase().equals(md.data[i][1].toLowerCase())){
           responseBuilder.add("Correct");
+          i++;
       }else{
           responseBuilder.add("Fuck you");
       }
+      if(i == 5){
+          i = 0;
+      }
       return responseBuilder.build();
   }
+
+
+
+
+
+
+
 
 }

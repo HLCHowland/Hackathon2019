@@ -23,6 +23,8 @@ import com.google.actions.api.ForIntent;
 import com.google.actions.api.response.ResponseBuilder;
 import com.google.api.services.actions_fulfillment.v2.model.SimpleResponse;
 import com.google.api.services.actions_fulfillment.v2.model.User;
+
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -34,33 +36,48 @@ import org.slf4j.LoggerFactory;
  */
 public class MyActionsApp extends DialogflowApp {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(MyActionsApp.class);
-  private int num = 0;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MyActionsApp.class);
+    private MockData md = new MockData();
+    private int i = 0;
+    private int num = 0;
 
-  @ForIntent("Test Intent")
-  public ActionResponse Test(ActionRequest request) {
-    ResponseBuilder responseBuilder = getResponseBuilder(request);
-    String test = (String) request.getParameter("test" );
+    @ForIntent("Test Intent")
+    public ActionResponse Test(ActionRequest request) {
+        ResponseBuilder responseBuilder = getResponseBuilder(request);
+        String test = (String) request.getParameter("test" );
 
-    Integer number = test.length() * 123;
+        Integer number = test.length() * 123;
 
-    String prompt = "You're lucky number is " + number + " !";
+        String prompt = "You're lucky number is " + number + " !";
 
-    responseBuilder.add(prompt).endConversation();
-    return responseBuilder.build();
-  }
+        responseBuilder.add(prompt).endConversation();
+        return responseBuilder.build();
+    }
 
-  @ForIntent("Run Test Quiz")
-  public ActionResponse TestQuiz(ActionRequest request){
-      MockData md = new MockData();
-      ResponseBuilder responseBuilder = getResponseBuilder(request);
+    @ForIntent("QuizPrompt")
+    public ActionResponse TestQuiz(ActionRequest request){
 
-      String firstQuestionPrompt = "Okay the first question is: "+md.data[2][0];
-      responseBuilder.add(firstQuestionPrompt).endConversation();
-      return responseBuilder.build();
+        ResponseBuilder responseBuilder = getResponseBuilder(request);
+        String firstQuestionPrompt = "Okay the next question is: "+md.data[i][0];
+        responseBuilder.add(firstQuestionPrompt);
+        return responseBuilder.build();
+    }
 
-
-  }
+    @ForIntent("AnswerPrompt")
+    public ActionResponse AnswerAttempt(ActionRequest request){
+        ResponseBuilder responseBuilder = getResponseBuilder(request);
+        String attempt = (String) request.getParameter("answerAttempt");
+        if(attempt.toLowerCase().equals(md.data[i][1].toLowerCase())){
+            responseBuilder.add("Correct");
+            i++;
+        }else{
+            responseBuilder.add("Fuck you");
+        }
+        if(i == 5){
+            i = 0;
+        }
+        return responseBuilder.build();
+    }
 
     @ForIntent("Stack Test")
     public ActionResponse Add(ActionRequest request) {
@@ -75,4 +92,8 @@ public class MyActionsApp extends DialogflowApp {
         return responseBuilder.build();
     }
 
+
 }
+
+
+

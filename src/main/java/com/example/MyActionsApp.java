@@ -54,7 +54,7 @@ public class MyActionsApp extends DialogflowApp {
       MockData md = new MockData();
       ResponseBuilder responseBuilder = getResponseBuilder(request);
 
-      String firstQuestionPrompt = "Okay the first question is: "+md.data[1][0];
+      String firstQuestionPrompt = "Okay the first question is: "+md.data[2][1];
       responseBuilder.add(firstQuestionPrompt).endConversation();
       return responseBuilder.build();
 

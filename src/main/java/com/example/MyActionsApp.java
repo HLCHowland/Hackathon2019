@@ -35,7 +35,8 @@ import org.slf4j.LoggerFactory;
 public class MyActionsApp extends DialogflowApp {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MyActionsApp.class);
-
+  private MockData md = new MockData();
+  private int i = 0;
   @ForIntent("Test Intent")
   public ActionResponse Test(ActionRequest request) {
     ResponseBuilder responseBuilder = getResponseBuilder(request);
@@ -51,16 +52,25 @@ public class MyActionsApp extends DialogflowApp {
 
   @ForIntent("Run Test Quiz")
   public ActionResponse TestQuiz(ActionRequest request){
-      MockData md = new MockData();
+
       ResponseBuilder responseBuilder = getResponseBuilder(request);
 
-      String firstQuestionPrompt = "Okay the first question is: "+md.data[2][0];
+      String firstQuestionPrompt = "Okay the first question is: "+md.data[i][0];
       responseBuilder.add(firstQuestionPrompt).endConversation();
       return responseBuilder.build();
-
-
   }
 
+  @ForIntent("Answer")
+  public ActionResponse AnswerAttempt(ActionRequest request){
 
+      ResponseBuilder responseBuilder = getResponseBuilder(request);
+      String attempt = (String) request.getParameter("answerAttempt");
+      if(attempt.equals(md.data[i][1])){
+          responseBuilder.add("Correct");
+      }else{
+          responseBuilder.add("Fuck you");
+      }
+      return responseBuilder.build();
+  }
 
 }
